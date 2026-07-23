@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+<!-- KSeF Alert Banner template — rendered via systray/notification, not injected into kanban grid -->
+<t t-name="l10n_pl_ksef_margin.KsefAlertBanner">
+    <t t-if="false"/><!-- disabled: banner injection into KanbanRenderer causes layout issues -->
+</t>
+</templates>

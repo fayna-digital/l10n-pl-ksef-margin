@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="l10n_pl_ksef_margin.KsefDashboard">
+    <div class="o_ksef_dashboard">
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- 1. Hero Action Bar                                                  -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <div class="o_ksef_hero">
+            <div class="o_ksef_hero_title">
+                <h2 class="mb-0">KSeF</h2>
+                <span class="text-muted small ms-2">Krajowy System e-Faktur</span>
+            </div>
+            <div class="o_ksef_hero_actions">
+                <button class="btn btn-primary" t-on-click="onSendAll" t-att-disabled="state.sending">
+                    <i t-attf-class="fa fa-{{ state.sending ? 'spinner fa-spin' : 'paper-plane' }} me-1"/>
+                    Wyślij faktury
+                </button>
+                <button class="btn btn-outline-secondary" t-on-click="onSync" t-att-disabled="state.syncing">
+                    <i t-attf-class="fa fa-{{ state.syncing ? 'spinner fa-spin' : 'cloud-download' }} me-1"/>
+                    <t t-if="state.syncing">Synchronizacja…</t>
+                    <t t-else="">Pobierz przychodzące</t>
+                </button>
+                <button class="btn btn-outline-secondary" t-on-click="onRefresh" title="Odśwież dashboard">
+                    <i class="fa fa-refresh"/>
+                </button>
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- Loading state                                                        -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <div t-if="!state.loaded" class="o_ksef_loading">
+            <i class="fa fa-spinner fa-spin fa-2x text-muted"/>
+        </div>
+
+        <t t-if="state.loaded">
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- COMPLIANCE BANNER — KSeF mandatory countdown (1.04.2026)             -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <div t-if="state.compliance.daysToMandate > 0"
+             class="o_ksef_compliance_banner mb-3">
+            <div class="o_ksef_compliance_left">
+                <i class="fa fa-calendar-check-o"/>
+                <div>
+                    <strong>Obowiązkowy KSeF</strong>
+                    <div class="small">dla wszystkich podatników VAT</div>
+                </div>
+            </div>
+            <div class="o_ksef_compliance_right">
+                <div class="o_ksef_compliance_count">
+                    <strong><t t-out="state.compliance.daysToMandate"/></strong>
+                    <span>dni</span>
+                </div>
+                <div class="small text-muted">do <t t-out="state.compliance.mandatoryDate"/></div>
+            </div>
+        </div>
+        <div t-elif="state.compliance.daysToMandate &lt;= 0"
+             class="o_ksef_compliance_banner o_ksef_compliance_active mb-3">
+            <i class="fa fa-check-circle me-2"/>
+            <strong>KSeF jest obowiązkowy.</strong> Wszystkie faktury sprzedaży muszą być wysłane do KSeF.
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- PIPELINE — workflow visualization replacing dry KPI numbers          -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <div class="o_ksef_pipeline mb-3">
+            <div class="o_ksef_pipeline_title">
+                <i class="fa fa-exchange me-1"/>
+                Pipeline faktur — kliknij etap aby filtrować
+            </div>
+            <div class="o_ksef_pipeline_flow">
+
+                <div class="o_ksef_stage o_ksef_stage_draft"
+                     t-on-click="() => this.openFiltered('draft')">
+                    <div class="o_ksef_stage_icon"><i class="fa fa-file-o"/></div>
+                    <div class="o_ksef_stage_count"><t t-out="state.stats.draft"/></div>
+                    <div class="o_ksef_stage_label">Szkic</div>
+                    <div t-if="state.inbox.draftOld > 0" class="o_ksef_stage_alert">
+                        <t t-out="state.inbox.draftOld"/> &gt; 24h
+                    </div>
+                </div>
+
+                <div class="o_ksef_pipe_arrow"><i class="fa fa-long-arrow-right"/></div>
+
+                <div class="o_ksef_stage o_ksef_stage_waiting"
+                     t-on-click="() => this.openFiltered('waiting')">
+                    <div class="o_ksef_stage_icon"><i class="fa fa-clock-o"/></div>
+                    <div class="o_ksef_stage_count"><t t-out="state.stats.waiting"/></div>
+                    <div class="o_ksef_stage_label">Czeka</div>
+                    <div t-if="state.inbox.waitingStuck > 0" class="o_ksef_stage_alert">
+                        <t t-out="state.inbox.waitingStuck"/> &gt; 1h
+                    </div>
+                </div>
+
+                <div class="o_ksef_pipe_arrow"><i class="fa fa-long-arrow-right"/></div>
+
+                <div class="o_ksef_stage o_ksef_stage_accepted"
+                     t-on-click="() => this.openFiltered('accepted')">
+                    <div class="o_ksef_stage_icon"><i class="fa fa-check-circle"/></div>
+                    <div class="o_ksef_stage_count"><t t-out="state.stats.accepted"/></div>
+                    <div class="o_ksef_stage_label">Zaakceptowane</div>
+                    <div class="o_ksef_stage_sub">
+                        <t t-out="state.stats.acceptedMonth"/> w tym miesiącu ·
+                        <t t-out="formatAmountCompact(state.stats.acceptedMonthAmount)"/> PLN
+                    </div>
+                </div>
+
+                <div t-if="state.stats.rejected > 0" class="o_ksef_pipe_arrow o_ksef_pipe_branch">
+                    <i class="fa fa-share-alt"/>
+                </div>
+                <div t-if="state.stats.rejected > 0"
+                     class="o_ksef_stage o_ksef_stage_rejected"
+                     t-on-click="() => this.openFiltered('rejected')">
+                    <div class="o_ksef_stage_icon"><i class="fa fa-times-circle"/></div>
+                    <div class="o_ksef_stage_count"><t t-out="state.stats.rejected"/></div>
+                    <div class="o_ksef_stage_label">Odrzucone</div>
+                    <div class="o_ksef_stage_sub">Wymaga poprawienia</div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- 3. Inbox / TODO (NEW central block — actionable items)              -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <div t-if="hasInboxItems" class="o_ksef_inbox mb-3">
+            <div class="o_ksef_inbox_header">
+                <i class="fa fa-inbox me-2"/>
+                <strong>Skrzynka zadań</strong>
+                <span class="text-muted small ms-2">— elementy wymagające uwagi</span>
+            </div>
+
+            <div class="o_ksef_inbox_items">
+
+                <!-- Buffer (incoming invoices) -->
+                <div t-if="state.inbox.bufferCount > 0"
+                     class="o_ksef_inbox_item o_ksef_inbox_info"
+                     t-on-click="openBuffer">
+                    <div class="o_ksef_inbox_icon"><i class="fa fa-download"/></div>
+                    <div class="o_ksef_inbox_body">
+                        <div class="o_ksef_inbox_title">
+                            <strong><t t-out="state.inbox.bufferCount"/></strong> przychodzących faktur do przetworzenia
+                        </div>
+                        <div class="o_ksef_inbox_hint">Kliknij aby zobaczyć bufor KSeF</div>
+                    </div>
+                    <i class="fa fa-chevron-right text-muted"/>
+                </div>
+
+                <!-- Rejected — with KSeF reason + retry button per item -->
+                <div t-if="state.inbox.rejectedItems.length > 0"
+                     class="o_ksef_inbox_item o_ksef_inbox_danger">
+                    <div class="o_ksef_inbox_icon"><i class="fa fa-times-circle"/></div>
+                    <div class="o_ksef_inbox_body">
+                        <div class="o_ksef_inbox_title">
+                            <strong><t t-out="state.inbox.rejectedItems.length"/></strong> odrzuconych faktur — wymaga poprawienia
+                        </div>
+                        <div class="o_ksef_inbox_subtitle text-muted small">
+                            <i class="fa fa-info-circle me-1"/>
+                            Faktury odrzucone przed aktualizacją modułu nie mają zapisanego powodu KSeF.
+                            Kliknij <strong>Ponów</strong> — przy następnym odrzuceniu zobaczysz dokładny powód.
+                        </div>
+                        <div class="o_ksef_inbox_rejected_list">
+                            <t t-foreach="state.inbox.rejectedItems" t-as="item" t-key="item.id">
+                                <div class="o_ksef_rejected_row">
+                                    <div class="o_ksef_rejected_main">
+                                        <a class="o_ksef_rejected_link" t-on-click="() => this.openMove(item.id)">
+                                            <strong><t t-out="item.name"/></strong>
+                                            <span class="text-muted ms-2">
+                                                <t t-out="formatAmount(item.amount_total, item.currency_id and item.currency_id[1])"/>
+                                            </span>
+                                        </a>
+                                        <div class="o_ksef_rejected_reason">
+                                            <i class="fa fa-quote-left me-1"/>
+                                            <t t-if="item.l10n_pl_ksef_error_message">
+                                                <t t-out="item.l10n_pl_ksef_error_message"/>
+                                                <span t-if="item.l10n_pl_ksef_error_code"
+                                                      class="text-muted small ms-1">
+                                                    (kod: <t t-out="item.l10n_pl_ksef_error_code"/>)
+                                                </span>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="text-muted">Brak szczegółów błędu</span>
+                                            </t>
+                                        </div>
+                                    </div>
+                                    <div class="o_ksef_rejected_actions">
+                                        <button class="btn btn-sm btn-outline-secondary"
+                                                t-on-click="() => this.openMove(item.id)"
+                                                title="Otwórz fakturę aby poprawić">
+                                            <i class="fa fa-pencil"/> Popraw
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-primary"
+                                                t-on-click="() => this.onRetryRejected(item.id)"
+                                                title="Wyślij ponownie bez zmian">
+                                            <i class="fa fa-refresh"/> Ponów
+                                        </button>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stuck waiting -->
+                <div t-if="state.inbox.waitingStuck > 0"
+                     class="o_ksef_inbox_item o_ksef_inbox_warning"
+                     t-on-click="() => this.openFiltered('waiting')">
+                    <div class="o_ksef_inbox_icon"><i class="fa fa-clock-o"/></div>
+                    <div class="o_ksef_inbox_body">
+                        <div class="o_ksef_inbox_title">
+                            <strong><t t-out="state.inbox.waitingStuck"/></strong> faktur oczekuje &gt; 1 godziny — sprawdź statusy
+                        </div>
+                        <div class="o_ksef_inbox_hint">Możliwy problem z dostępnością KSeF</div>
+                    </div>
+                    <i class="fa fa-chevron-right text-muted"/>
+                </div>
+
+                <!-- Old drafts -->
+                <div t-if="state.inbox.draftOld > 0"
+                     class="o_ksef_inbox_item o_ksef_inbox_warning"
+                     t-on-click="() => this.openFiltered('draft')">
+                    <div class="o_ksef_inbox_icon"><i class="fa fa-paper-plane-o"/></div>
+                    <div class="o_ksef_inbox_body">
+                        <div class="o_ksef_inbox_title">
+                            <strong><t t-out="state.inbox.draftOld"/></strong> nie wysłanych faktur starszych niż 24h
+                        </div>
+                        <div class="o_ksef_inbox_hint">Zalecane: kliknij "Wyślij faktury" aby wysłać hurtowo</div>
+                    </div>
+                    <i class="fa fa-chevron-right text-muted"/>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- 4 + 5. Body: Activity Chart (left) + Recent Operations (right)      -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <div class="row g-3">
+
+            <!-- Activity chart -->
+            <div class="col-12 col-xl-8">
+                <div class="o_ksef_card">
+                    <div class="o_ksef_card_header">
+                        <span>
+                            Aktywność za <t t-out="state.chartDays"/> dni
+                            <span class="text-muted small fw-normal ms-1">— liczba wystawionych faktur</span>
+                        </span>
+                        <div class="btn-group btn-group-sm">
+                            <button t-attf-class="btn btn-{{ state.chartDays === 7 ? 'primary' : 'outline-secondary' }}"
+                                    t-on-click="() => this.onSetRange(7)">7d</button>
+                            <button t-attf-class="btn btn-{{ state.chartDays === 30 ? 'primary' : 'outline-secondary' }}"
+                                    t-on-click="() => this.onSetRange(30)">30d</button>
+                            <button t-attf-class="btn btn-{{ state.chartDays === 90 ? 'primary' : 'outline-secondary' }}"
+                                    t-on-click="() => this.onSetRange(90)">90d</button>
+                        </div>
+                    </div>
+                    <div class="o_ksef_chart_wrapper">
+                        <t t-set="svg" t-value="chartSvg"/>
+                        <t t-if="svg">
+                            <svg t-attf-viewBox="0 0 {{ svg.W }} {{ svg.H }}"
+                                 preserveAspectRatio="none"
+                                 class="o_ksef_chart_svg"
+                                 t-on-mouseleave="onChartLeave">
+                                <defs>
+                                    <linearGradient id="ksefFill" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="#875a7b" stop-opacity="0.20"/>
+                                        <stop offset="100%" stop-color="#875a7b" stop-opacity="0.01"/>
+                                    </linearGradient>
+                                </defs>
+                                <line t-att-x1="svg.pad.l" t-att-y1="svg.baseline"
+                                      t-att-x2="svg.W - svg.pad.r" t-att-y2="svg.baseline"
+                                      stroke="#e9ecef" stroke-width="1"/>
+                                <t t-foreach="svg.yTicks" t-as="ytick" t-key="ytick.y">
+                                    <text t-att-x="svg.pad.l - 4" t-att-y="ytick.y + 3"
+                                          text-anchor="end" font-size="9" fill="#adb5bd">
+                                        <t t-out="ytick.value"/>
+                                    </text>
+                                </t>
+                                <path t-att-d="svg.areaPath" fill="url(#ksefFill)"/>
+                                <path t-att-d="svg.linePath"
+                                      fill="none" stroke="#875a7b" stroke-width="1.5"
+                                      stroke-linejoin="round" stroke-linecap="round"
+                                      vector-effect="non-scaling-stroke"/>
+                                <t t-if="state.tooltip.visible">
+                                    <line t-att-x1="state.tooltip.svgX" t-att-y1="svg.pad.t"
+                                          t-att-x2="state.tooltip.svgX" t-att-y2="svg.baseline"
+                                          stroke="#875a7b" stroke-width="1"
+                                          stroke-dasharray="3,3" opacity="0.45"/>
+                                    <circle t-att-cx="state.tooltip.svgX" t-att-cy="state.tooltip.svgY"
+                                            r="4" fill="#875a7b" stroke="#fff" stroke-width="2"/>
+                                </t>
+                                <t t-foreach="svg.ticks" t-as="xtick" t-key="'x' + xtick.idx">
+                                    <text t-att-x="xtick.x" t-att-y="svg.H - 6"
+                                          text-anchor="middle" font-size="9" fill="#adb5bd">
+                                        <t t-out="xtick.label"/>
+                                    </text>
+                                </t>
+                                <t t-foreach="svg.coords" t-as="pt" t-key="'p' + pt.idx">
+                                    <circle t-att-cx="pt.x" t-att-cy="pt.y" r="10"
+                                            fill="transparent" style="cursor:crosshair"
+                                            t-on-mouseenter="() => this.onPointEnter(pt)"/>
+                                </t>
+                            </svg>
+                            <div t-if="state.tooltip.visible"
+                                 class="o_ksef_tooltip"
+                                 t-attf-style="left:{{ state.tooltip.xPct }}%;top:{{ state.tooltip.yPct }}%">
+                                <div class="o_ksef_tooltip_date"><t t-out="state.tooltip.label"/></div>
+                                <strong><t t-out="state.tooltip.count"/></strong>
+                            </div>
+                        </t>
+                        <div t-else="" class="text-muted small text-center py-4">
+                            Brak danych do wyświetlenia
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent operations -->
+            <div class="col-12 col-xl-4">
+                <div class="o_ksef_card o_ksef_recent">
+                    <div class="o_ksef_card_header">
+                        <span>Ostatnie operacje</span>
+                        <a class="small" t-on-click="() => this.openFiltered(null)">
+                            Wszystkie →
+                        </a>
+                    </div>
+
+                    <div t-if="!state.recentMoves.length" class="text-muted small text-center py-4">
+                        Brak faktur
+                    </div>
+
+                    <div t-else="" class="o_ksef_recent_list">
+                        <t t-foreach="state.recentMoves" t-as="move" t-key="move.id">
+                            <div class="o_ksef_recent_row" t-on-click="() => this.openMove(move.id)">
+                                <div class="o_ksef_recent_main">
+                                    <div class="o_ksef_recent_name">
+                                        <t t-out="move.name or '—'"/>
+                                    </div>
+                                    <div class="o_ksef_recent_partner text-muted small">
+                                        <t t-if="move.partner_id">
+                                            <t t-out="move.partner_id[1]"/>
+                                        </t>
+                                    </div>
+                                </div>
+                                <div class="o_ksef_recent_meta">
+                                    <div class="o_ksef_recent_amount">
+                                        <t t-out="formatAmount(move.amount_total, move.currency_id and move.currency_id[1])"/>
+                                    </div>
+                                    <div>
+                                        <span t-attf-class="{{ statusBadgeClass(move.l10n_pl_ksef_status) }} small">
+                                            <t t-out="statusLabel(move.l10n_pl_ksef_status)"/>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        </t>
+    </div>
+</t>
+
+</templates>

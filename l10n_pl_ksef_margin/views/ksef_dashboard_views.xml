@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Pivot view — підрахунок і суми по статусах -->
+    <record id="view_ksef_pivot" model="ir.ui.view">
+        <field name="name">ksef.invoices.pivot</field>
+        <field name="model">account.move</field>
+        <field name="arch" type="xml">
+            <pivot string="KSeF — Статистика" disable_linking="0">
+                <field name="l10n_pl_ksef_status" type="row"/>
+                <field name="invoice_date" type="col" interval="month"/>
+                <field name="amount_total" type="measure"/>
+                <field name="id" type="measure" string="Кількість"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Graph view — діаграма по статусах -->
+    <record id="view_ksef_graph" model="ir.ui.view">
+        <field name="name">ksef.invoices.graph</field>
+        <field name="model">account.move</field>
+        <field name="arch" type="xml">
+            <graph string="KSeF — Діаграма" type="bar" stacked="0">
+                <field name="l10n_pl_ksef_status" type="row"/>
+                <field name="amount_total" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- List view — останні відправки -->
+    <record id="view_ksef_sent_invoices_tree" model="ir.ui.view">
+        <field name="name">ksef.sent.invoices.tree</field>
+        <field name="model">account.move</field>
+        <field name="arch" type="xml">
+            <tree default_order="write_date desc"
+                  decoration-success="l10n_pl_ksef_status == 'accepted'"
+                  decoration-warning="l10n_pl_ksef_status == 'waiting'"
+                  decoration-danger="l10n_pl_ksef_status == 'rejected'"
+                  decoration-muted="l10n_pl_ksef_status == 'draft'">
+                <field name="name" string="Інвойс"/>
+                <field name="invoice_date" string="Дата"/>
+                <field name="partner_id" string="Клієнт"/>
+                <field name="amount_total" string="Сума" widget="monetary"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="l10n_pl_ksef_status" string="KSeF Статус"/>
+                <field name="l10n_pl_ksef_reference" string="Nr KSeF"/>
+                <field name="write_date" string="Оновлено"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search view -->
+    <record id="view_ksef_dashboard_search" model="ir.ui.view">
+        <field name="name">ksef.dashboard.search</field>
+        <field name="model">account.move</field>
+        <field name="arch" type="xml">
+            <search string="KSeF Пошук">
+                <filter name="ksef_accepted" string="Прийнято"
+                        domain="[('l10n_pl_ksef_status','=','accepted')]"/>
+                <filter name="ksef_waiting" string="Очікує"
+                        domain="[('l10n_pl_ksef_status','=','waiting')]"/>
+                <filter name="ksef_rejected" string="Відхилено"
+                        domain="[('l10n_pl_ksef_status','=','rejected')]"/>
+                <filter name="ksef_not_sent" string="Не відправлено"
+                        domain="[('l10n_pl_ksef_status','=','draft')]"/>
+                <separator/>
+                <filter name="this_month" string="Цей місяць"
+                        domain="[('invoice_date','&gt;=', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Групувати">
+                    <filter name="group_by_status" string="По статусу KSeF"
+                            context="{'group_by':'l10n_pl_ksef_status'}"/>
+                    <filter name="group_by_partner" string="По клієнту"
+                            context="{'group_by':'partner_id'}"/>
+                    <filter name="group_by_month" string="По місяцю"
+                            context="{'group_by':'invoice_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action дашборду — OWL client action (повноцінний KSeF Dashboard) -->
+    <record id="action_ksef_main" model="ir.actions.client">
+        <field name="name">KSeF — Дашборд</field>
+        <field name="tag">ksef_dashboard</field>
+    </record>
+
+    <!-- Action для прямого доступу до списку фактур KSeF (використовується з дашборду) -->
+    <record id="action_ksef_dashboard" model="ir.actions.act_window">
+        <field name="name">KSeF — Фактури</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">tree,pivot,graph,form</field>
+        <field name="domain">[('move_type','in',['out_invoice','out_refund']),('state','=','posted')]</field>
+        <field name="search_view_id" ref="view_ksef_dashboard_search"/>
+        <field name="view_ids" eval="[
+            (5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_ksef_sent_invoices_tree')}),
+            (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_ksef_pivot')}),
+            (0, 0, {'view_mode': 'graph', 'view_id': ref('view_ksef_graph')}),
+        ]"/>
+    </record>
+
+    <!-- Меню -->
+    <menuitem id="menu_ksef_dashboard"
+              name="Дашборд"
+              parent="menu_ksef_root"
+              action="action_ksef_main"
+              sequence="1"/>
+
+</odoo>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_company_form_ksef" model="ir.ui.view">
+        <field name="name">res.company.form.ksef</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page string="KSeF" name="ksef">
+                    <group string="KSeF — Krajowy System e-Faktur">
+                        <field name="l10n_pl_ksef_env" required="1"/>
+                        <field name="l10n_pl_ksef_token" password="True"/>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>

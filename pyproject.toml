@@ -1,0 +1,77 @@
+# Dev tooling config для Odoo 17 module `l10n_pl_ksef_margin`.
+# Сам модуль не є Python-пакетом (він Odoo module), тому [project] відсутній.
+# Тут тільки налаштування для ruff / pytest / mypy / coverage.
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+extend-exclude = [
+    "__pycache__",
+    "*.pot",
+    "*.po",
+    "migrations",
+    "static/lib",
+]
+
+[tool.ruff.lint]
+# E,F,W   — pycodestyle + pyflakes (baseline)
+# I       — isort (import ordering)
+# N       — pep8-naming
+# UP      — pyupgrade (modern syntax)
+# B       — flake8-bugbear (common bugs)
+# S       — flake8-bandit (security)
+# C4      — flake8-comprehensions
+# SIM     — flake8-simplify
+select = ["E", "F", "W", "I", "N", "UP", "B", "S", "C4", "SIM"]
+ignore = [
+    "E501",  # line-length handled by formatter
+    "N806",  # Odoo pattern: `Partner = self.env['res.partner']` (capitalized model-alias)
+    "N815",  # mixedCase у class attributes (Odoo fields можуть бути camelCase у old style)
+    "N817",  # `ElementTree as ET` — near-universal stdlib idiom, applies equally to defusedxml
+    "S314",  # ksef_xml_parser.py imports defusedxml.ElementTree with a stdlib fallback (see
+             # module docstring); ruff's static check can't see through the try/except guard
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/*" = ["S101", "S105", "S106", "S107", "S314"]  # asserts + fake NIP/token fixtures + parsing our own generated XML ok
+"**/__manifest__.py" = ["S", "B018"]             # manifest file — bare dict literal (Odoo convention)
+"**/__init__.py" = ["F401", "N999"]              # Odoo init: F401 re-exports; N999 repo uses dashes, module uses underscores
+"**/migrations/*" = ["ALL"]                      # migration scripts мають власну структуру
+
+[tool.ruff.format]
+quote-style = "single"
+indent-style = "space"
+skip-magic-trailing-comma = false
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["l10n_pl_ksef_margin/tests"]
+# --import-mode=importlib: this is an Odoo addon (l10n_pl_ksef_margin/__init__.py
+# does `from . import models, services`, which needs a live Odoo to import), which
+# conflicts with pytest's default package-walk import mode when running plain
+# `pytest` outside Odoo. See tests/conftest.py and tests/__init__.py for the
+# matching half of this workaround.
+addopts = "-ra -q --strict-markers --import-mode=importlib"
+markers = [
+    "slow: marks tests as slow",
+    "integration: Odoo integration tests requiring database",
+]
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true
+warn_unused_ignores = true
+exclude = ["migrations"]
+
+[tool.coverage.run]
+source = ["l10n_pl_ksef_margin"]
+omit = [
+    "*/tests/*",
+    "*/migrations/*",
+    "__manifest__.py",
+]
+
+[tool.coverage.report]
+fail_under = 60
+show_missing = true
+skip_covered = true

@@ -1,0 +1,24 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.log
+*.pdf
+sessions/
+.context_id_cache
+.DS_Store
+
+# Секрети — НІКОЛИ не комітити (golden rule #1)
+.env
+.env.*
+*.pem
+*.key
+*.crt
+*.cert
+*.p12
+*_token*
+ksef_token*
+
+# Кеші інструментів
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/

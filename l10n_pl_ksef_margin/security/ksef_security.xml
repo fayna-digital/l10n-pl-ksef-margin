@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ── Security Groups ─────────────────────────────────────────── -->
+
+    <record id="group_ksef_user" model="res.groups">
+        <field name="name">KSeF User</field>
+        <field name="category_id" ref="base.module_category_accounting_accounting"/>
+        <field name="comment">
+            Dostęp do wysyłki faktur do KSeF i przeglądania buforów faktur
+            przychodzących. Wymagany dla każdego kto korzysta z modułu KSeF.
+        </field>
+    </record>
+
+    <record id="group_ksef_admin" model="res.groups">
+        <field name="name">KSeF Administrator</field>
+        <field name="category_id" ref="base.module_category_accounting_accounting"/>
+        <field name="implied_ids" eval="[(4, ref('group_ksef_user'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        <field name="comment">
+            Pełny dostęp do KSeF: konfiguracja tokenów, usuwanie rekordów bufora,
+            ręczne resetowanie statusów. Zawiera uprawnienia KSeF User.
+        </field>
+    </record>
+
+    <!-- ── Record Rules ────────────────────────────────────────────── -->
+
+    <!-- KSeF Admin: unrestricted access to vendor buffer -->
+    <record id="rule_ksef_vendor_buffer_admin" model="ir.rule">
+        <field name="name">KSeF Vendor Buffer — Admin (all companies)</field>
+        <field name="model_id" ref="l10n_pl_ksef_margin.model_ksef_vendor_buffer"/>
+        <field name="groups" eval="[(4, ref('group_ksef_admin'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">1</field>
+    </record>
+
+    <!-- KSeF User: own company only, no unlink -->
+    <record id="rule_ksef_vendor_buffer_user" model="ir.rule">
+        <field name="name">KSeF Vendor Buffer — User (own company)</field>
+        <field name="model_id" ref="l10n_pl_ksef_margin.model_ksef_vendor_buffer"/>
+        <field name="groups" eval="[(4, ref('group_ksef_user'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="perm_read">1</field>
+        <field name="perm_write">1</field>
+        <field name="perm_create">1</field>
+        <field name="perm_unlink">0</field>
+    </record>
+
+</odoo>

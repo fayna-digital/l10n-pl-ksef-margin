@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ksef_vendor_buffer_user,ksef.vendor.buffer.user,model_ksef_vendor_buffer,l10n_pl_ksef_margin.group_ksef_user,1,1,1,0
+access_ksef_vendor_buffer_admin,ksef.vendor.buffer.admin,model_ksef_vendor_buffer,l10n_pl_ksef_margin.group_ksef_admin,1,1,1,1
+access_ksef_vendor_buffer_accountant,ksef.vendor.buffer.accountant,model_ksef_vendor_buffer,account.group_account_invoice,1,1,1,0
+access_ksef_bulk_send_wizard,ksef.bulk.send.wizard,model_ksef_bulk_send_wizard,account.group_account_invoice,1,1,1,1

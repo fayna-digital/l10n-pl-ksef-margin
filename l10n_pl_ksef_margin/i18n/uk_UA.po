@@ -1,0 +1,76 @@
+# Translation of Fayna KSeF — Krajowy System e-Faktur
+# Ukrainian (uk_UA)
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Fayna KSeF 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-02 00:00+0000\n"
+"PO-Revision-Date: 2026-05-02 00:00+0000\n"
+"Last-Translator: Fayna Digital\n"
+"Language-Team: Ukrainian (uk_UA)\n"
+"Language: uk_UA\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14) ? 2 : 3);\n"
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Чернетка"
+msgstr "Чернетка"
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Очікує"
+msgstr "Очікує"
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Прийнято"
+msgstr "Прийнято"
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Відхилено"
+msgstr "Відхилено"
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Brak faktur do wysłania."
+msgstr "Немає фактур для відправки."
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "KSeF — Wyślij faktury"
+msgstr "KSeF — Надіслати фактури"
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Synchronizacja z KSeF zakończona."
+msgstr "Синхронізацію з KSeF завершено."
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Błąd synchronizacji: %s"
+msgstr "Помилка синхронізації: %s"
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Dashboard odświeżony."
+msgstr "Дашборд оновлено."
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Faktura wysłana ponownie do KSeF."
+msgstr "Фактуру повторно надіслано до KSeF."
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Błąd ponownej wysyłki: %s"
+msgstr "Помилка повторної відправки: %s"
+
+#. module: l10n_pl_ksef_margin
+#. odoo-python
+msgid "No description provided by KSeF."
+msgstr "KSeF не повідомив деталей відхилення."

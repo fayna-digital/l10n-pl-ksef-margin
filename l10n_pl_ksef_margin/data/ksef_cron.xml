@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="ir_cron_ksef_auto_send_draft" model="ir.cron">
+        <field name="name">KSeF — Automatyczne wysyłanie faktur (draft → waiting)</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="state">code</field>
+        <field name="code">env['account.move'].action_auto_send_ksef_draft()</field>
+        <field name="interval_number">30</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+        <field name="user_id" ref="base.user_root"/>
+    </record>
+
+    <record id="ir_cron_ksef_check_outgoing_status" model="ir.cron">
+        <field name="name">KSeF — Sprawdzanie statusów faktur wychodzących</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="state">code</field>
+        <field name="code">env['account.move'].action_check_ksef_outgoing_status()</field>
+        <field name="interval_number">15</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+        <field name="user_id" ref="base.user_root"/>
+    </record>
+
+    <record id="ir_cron_ksef_sync" model="ir.cron">
+        <field name="name">KSeF — Codzienna synchronizacja faktur przychodzących</field>
+        <field name="model_id" ref="l10n_pl_ksef_margin.model_ksef_vendor_buffer"/>
+        <field name="state">code</field>
+        <field name="code">env['ksef.vendor.buffer'].action_sync_from_ksef()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+        <field name="user_id" ref="base.user_root"/>
+    </record>
+
+</odoo>

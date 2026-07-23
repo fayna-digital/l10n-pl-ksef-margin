@@ -1,0 +1,76 @@
+# Translation of Fayna KSeF — Krajowy System e-Faktur
+# Polish (pl_PL)
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Fayna KSeF 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-02 00:00+0000\n"
+"PO-Revision-Date: 2026-05-02 00:00+0000\n"
+"Last-Translator: Fayna Digital\n"
+"Language-Team: Polish (pl_PL)\n"
+"Language: pl_PL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Чернетка"
+msgstr "Szkic"
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Очікує"
+msgstr "Oczekuje"
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Прийнято"
+msgstr "Zaakceptowane"
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Відхилено"
+msgstr "Odrzucone"
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Brak faktur do wysłania."
+msgstr "Brak faktur do wysłania."
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "KSeF — Wyślij faktury"
+msgstr "KSeF — Wyślij faktury"
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Synchronizacja z KSeF zakończona."
+msgstr "Synchronizacja z KSeF zakończona."
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Błąd synchronizacji: %s"
+msgstr "Błąd synchronizacji: %s"
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Dashboard odświeżony."
+msgstr "Dashboard odświeżony."
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Faktura wysłana ponownie do KSeF."
+msgstr "Faktura wysłana ponownie do KSeF."
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Błąd ponownej wysyłki: %s"
+msgstr "Błąd ponownej wysyłki: %s"
+
+#. module: l10n_pl_ksef_margin
+#. odoo-python
+msgid "No description provided by KSeF."
+msgstr "KSeF nie podał szczegółów odrzucenia."

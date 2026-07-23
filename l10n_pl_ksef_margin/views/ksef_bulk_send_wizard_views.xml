@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Confirmation / progress form -->
+    <record id="view_ksef_bulk_send_wizard_form" model="ir.ui.view">
+        <field name="name">ksef.bulk.send.wizard.form</field>
+        <field name="model">ksef.bulk.send.wizard</field>
+        <field name="arch" type="xml">
+            <form string="KSeF — Masowa wysyłka">
+                <!-- state must be present for invisible modifiers -->
+                <field name="state" invisible="1"/>
+
+                <!-- count_pre_mandatory must be declared for invisible modifier -->
+                <field name="count_pre_mandatory" invisible="1"/>
+
+                <!-- CONFIRM state -->
+                <group invisible="state != 'confirm'">
+                    <group string="Podsumowanie">
+                        <field name="count_total" readonly="1" string="Zaznaczono łącznie"/>
+                        <field name="count_eligible" readonly="1"
+                               string="Gotowych do wysyłki (od 01.04.2026)"/>
+                        <field name="count_skipped" readonly="1"
+                               string="Pominięto (Waiting / Accepted)"/>
+                        <field name="count_pre_mandatory" readonly="1"
+                               string="Przed 01.04.2026 — tylko ręcznie"/>
+                    </group>
+
+                    <!-- Info: pre-mandatory invoices excluded (t-out forbidden in form arch) -->
+                    <div class="alert alert-warning mb-0" role="alert"
+                         invisible="count_pre_mandatory == 0">
+                        <strong>Uwaga:</strong>
+                        Część faktur wystawiona przed 01.04.2026 nie zostanie wysłana
+                        zbiorczo — wyślij je ręcznie (indywidualna decyzja księgowego).
+                    </div>
+
+                    <!-- Info: already sent invoices skipped -->
+                    <p class="text-muted" invisible="count_skipped == 0">
+                        Faktury ze statusem 'Waiting' lub 'Accepted' zostaną pominięte.
+                    </p>
+
+                    <!-- Error: nothing to send -->
+                    <p class="text-danger" invisible="count_eligible != 0">
+                        Brak faktur gotowych do wysyłki od 01.04.2026.
+                    </p>
+                </group>
+
+                <!-- DONE state: results -->
+                <group invisible="state != 'done'">
+                    <group string="Wynik">
+                        <field name="result_sent" readonly="1" string="Wysłano"/>
+                        <field name="result_failed" readonly="1" string="Błędy"/>
+                    </group>
+                    <group string="Szczegóły">
+                        <field name="result_log" readonly="1" nolabel="1" widget="text"/>
+                    </group>
+                </group>
+
+                <footer>
+                    <!-- Confirm buttons -->
+                    <button name="action_send"
+                            string="Wyślij do KSeF"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state != 'confirm'"
+                            data-hotkey="q"/>
+                    <button string="Anuluj"
+                            class="btn-secondary"
+                            invisible="state != 'confirm'"
+                            special="cancel"/>
+
+                    <!-- Done button -->
+                    <button name="action_close"
+                            string="Zamknij"
+                            type="object"
+                            class="btn-primary"
+                            invisible="state != 'done'"/>
+                </footer>
+
+            </form>
+        </field>
+    </record>
+
+    <!-- Action to open wizard as dialog -->
+    <record id="action_ksef_bulk_send_wizard" model="ir.actions.act_window">
+        <field name="name">KSeF — Masowa wysyłka</field>
+        <field name="res_model">ksef.bulk.send.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

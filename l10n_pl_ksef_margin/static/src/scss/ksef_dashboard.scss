@@ -1,0 +1,565 @@
+// ═══════════════════════════════════════════════════════════════════════════
+// KSeF Dashboard — design tokens + responsive layout
+// Inspired by Odoo 17 modern accounting dashboard best practices.
+// All colors via CSS vars → easy theme override.
+// ═══════════════════════════════════════════════════════════════════════════
+
+.o_ksef_dashboard {
+    // ── Design tokens ───────────────────────────────────────────────────────
+    --ksef-bg:           #f4f6f8;
+    --ksef-card-bg:      #ffffff;
+    --ksef-text:         #2c3e50;
+    --ksef-muted:        #6c757d;
+    --ksef-border:       #e9ecef;
+    --ksef-shadow:       0 1px 3px rgba(0, 0, 0, .04), 0 4px 12px rgba(0, 0, 0, .04);
+    --ksef-shadow-hover: 0 2px 6px rgba(0, 0, 0, .08), 0 8px 24px rgba(0, 0, 0, .08);
+    --ksef-radius:       10px;
+    --ksef-primary:      #875a7b;
+    --ksef-success:      #28a745;
+    --ksef-warning:      #ffc107;
+    --ksef-warning-text: #856404;
+    --ksef-danger:       #dc3545;
+    --ksef-info:         #17a2b8;
+    --ksef-info-bg:      #e7f5f9;
+    --ksef-warning-bg:   #fff8e1;
+    --ksef-danger-bg:    #fdecea;
+
+    padding: 20px;
+    background: var(--ksef-bg);
+    min-height: 100%;
+    color: var(--ksef-text);
+
+    // ── 1. Hero ─────────────────────────────────────────────────────────────
+    .o_ksef_hero {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+
+        h2 { font-size: 22px; font-weight: 700; margin: 0; }
+
+        .o_ksef_hero_title { display: flex; align-items: baseline; }
+        .o_ksef_hero_actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    }
+
+    // ── Loading ─────────────────────────────────────────────────────────────
+    .o_ksef_loading {
+        display: flex;
+        justify-content: center;
+        padding: 80px;
+    }
+
+    // ── COMPLIANCE banner ──────────────────────────────────────────────────
+    .o_ksef_compliance_banner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 14px 20px;
+        background: linear-gradient(135deg, #fff8e1 0%, #fff3cd 100%);
+        border-radius: var(--ksef-radius);
+        border-left: 4px solid var(--ksef-warning);
+        box-shadow: var(--ksef-shadow);
+
+        .o_ksef_compliance_left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            i {
+                font-size: 26px;
+                color: #856404;
+            }
+        }
+
+        .o_ksef_compliance_right {
+            text-align: right;
+        }
+
+        .o_ksef_compliance_count {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            justify-content: flex-end;
+
+            strong {
+                font-size: 28px;
+                font-weight: 700;
+                color: #856404;
+                line-height: 1;
+            }
+            span {
+                font-size: 14px;
+                color: var(--ksef-muted);
+            }
+        }
+
+        &.o_ksef_compliance_active {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-left-color: var(--ksef-success);
+            color: #155724;
+            i { color: var(--ksef-success); }
+        }
+    }
+
+    // ── PIPELINE — workflow flow visualization ──────────────────────────────
+    .o_ksef_pipeline {
+        background: var(--ksef-card-bg);
+        border-radius: var(--ksef-radius);
+        padding: 20px;
+        box-shadow: var(--ksef-shadow);
+    }
+
+    .o_ksef_pipeline_title {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+        color: var(--ksef-muted);
+        margin-bottom: 16px;
+        font-weight: 600;
+    }
+
+    .o_ksef_pipeline_flow {
+        display: flex;
+        align-items: stretch;
+        gap: 8px;
+
+        @media (max-width: 768px) {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    }
+
+    .o_ksef_stage {
+        flex: 1;
+        min-width: 120px;
+        padding: 16px 12px;
+        border-radius: 10px;
+        background: #f8f9fa;
+        cursor: pointer;
+        transition: all .15s;
+        text-align: center;
+        position: relative;
+        border: 2px solid transparent;
+
+        &:hover {
+            background: #fff;
+            border-color: rgba(135, 90, 123, .3);
+            transform: translateY(-2px);
+            box-shadow: var(--ksef-shadow-hover);
+        }
+
+        .o_ksef_stage_icon {
+            font-size: 22px;
+            margin-bottom: 6px;
+            opacity: .8;
+        }
+
+        .o_ksef_stage_count {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .o_ksef_stage_label {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .3px;
+            color: var(--ksef-muted);
+        }
+
+        .o_ksef_stage_sub {
+            margin-top: 6px;
+            font-size: 11px;
+            color: var(--ksef-muted);
+        }
+
+        .o_ksef_stage_alert {
+            margin-top: 6px;
+            display: inline-block;
+            font-size: 10px;
+            background: var(--ksef-warning);
+            color: #856404;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        &.o_ksef_stage_draft {
+            .o_ksef_stage_icon, .o_ksef_stage_count { color: var(--ksef-muted); }
+        }
+        &.o_ksef_stage_waiting {
+            .o_ksef_stage_icon, .o_ksef_stage_count { color: #856404; }
+        }
+        &.o_ksef_stage_accepted {
+            background: rgba(40, 167, 69, .08);
+            .o_ksef_stage_icon, .o_ksef_stage_count { color: var(--ksef-success); }
+        }
+        &.o_ksef_stage_rejected {
+            background: rgba(220, 53, 69, .08);
+            border-color: rgba(220, 53, 69, .3);
+            .o_ksef_stage_icon, .o_ksef_stage_count { color: var(--ksef-danger); }
+        }
+    }
+
+    .o_ksef_pipe_arrow {
+        display: flex;
+        align-items: center;
+        color: #ced4da;
+        font-size: 18px;
+        flex-shrink: 0;
+
+        @media (max-width: 768px) { display: none; }
+
+        &.o_ksef_pipe_branch {
+            color: var(--ksef-danger);
+            opacity: .6;
+        }
+    }
+
+    // ── 2. KPI cards ────────────────────────────────────────────────────────
+    .o_ksef_kpi {
+        background: var(--ksef-card-bg);
+        border-radius: var(--ksef-radius);
+        padding: 16px 20px;
+        box-shadow: var(--ksef-shadow);
+        cursor: pointer;
+        transition: box-shadow .15s, transform .1s;
+        border-left: 4px solid var(--ksef-border);
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        height: 100%;
+
+        &:hover {
+            box-shadow: var(--ksef-shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        .o_ksef_kpi_top {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--ksef-muted);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .3px;
+
+            i { font-size: 14px; }
+        }
+
+        .o_ksef_kpi_label { font-weight: 600; }
+        .o_ksef_kpi_value { font-size: 32px; font-weight: 700; line-height: 1.1; }
+        .o_ksef_kpi_sub { font-size: 12px; color: var(--ksef-muted); }
+
+        // Variants by status
+        &.o_ksef_kpi_accepted {
+            border-left-color: var(--ksef-success);
+            .o_ksef_kpi_top i, .o_ksef_kpi_value { color: var(--ksef-success); }
+        }
+        &.o_ksef_kpi_waiting {
+            border-left-color: var(--ksef-warning);
+            .o_ksef_kpi_top i, .o_ksef_kpi_value { color: var(--ksef-warning-text); }
+        }
+        &.o_ksef_kpi_draft {
+            border-left-color: var(--ksef-muted);
+            .o_ksef_kpi_top i, .o_ksef_kpi_value { color: var(--ksef-muted); }
+        }
+        &.o_ksef_kpi_rejected {
+            border-left-color: var(--ksef-border);
+            .o_ksef_kpi_top i, .o_ksef_kpi_value { color: #adb5bd; }
+        }
+
+        // Alert / critical states
+        &.o_ksef_kpi_alert {
+            background: var(--ksef-warning-bg);
+        }
+        &.o_ksef_kpi_critical {
+            border-left-color: var(--ksef-danger);
+            background: var(--ksef-danger-bg);
+            .o_ksef_kpi_top i, .o_ksef_kpi_value { color: var(--ksef-danger); }
+        }
+    }
+
+    // ── 3. Inbox / TODO ─────────────────────────────────────────────────────
+    .o_ksef_inbox {
+        background: var(--ksef-card-bg);
+        border-radius: var(--ksef-radius);
+        padding: 16px 20px;
+        box-shadow: var(--ksef-shadow);
+
+        .o_ksef_inbox_header {
+            display: flex;
+            align-items: baseline;
+            font-size: 14px;
+            margin-bottom: 12px;
+            color: var(--ksef-text);
+            i { color: var(--ksef-primary); }
+        }
+
+        .o_ksef_inbox_items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .o_ksef_inbox_item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background .12s;
+            border-left: 3px solid transparent;
+
+            &:hover { background: rgba(0, 0, 0, .02); }
+
+            .o_ksef_inbox_icon {
+                font-size: 18px;
+                flex-shrink: 0;
+                width: 26px;
+                text-align: center;
+            }
+
+            .o_ksef_inbox_body {
+                flex: 1;
+                min-width: 0;
+
+                .o_ksef_inbox_title { font-size: 14px; line-height: 1.4; }
+                .o_ksef_inbox_subtitle { font-size: 12px; margin-top: 4px; line-height: 1.4; }
+                .o_ksef_inbox_hint  { font-size: 12px; color: var(--ksef-muted); margin-top: 2px; }
+            }
+
+            .o_ksef_inbox_list {
+                margin-top: 6px;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+
+            .o_ksef_inbox_chip {
+                display: inline-block;
+                padding: 3px 8px;
+                font-size: 12px;
+                background: rgba(255, 255, 255, .7);
+                border: 1px solid rgba(0, 0, 0, .08);
+                border-radius: 12px;
+                color: var(--ksef-text);
+                cursor: pointer;
+                text-decoration: none;
+                transition: background .12s;
+
+                &:hover {
+                    background: #fff;
+                    text-decoration: none;
+                    color: var(--ksef-primary);
+                }
+            }
+
+            // Rejected items — full row with reason + retry buttons
+            .o_ksef_inbox_rejected_list {
+                margin-top: 8px;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .o_ksef_rejected_row {
+                display: flex;
+                gap: 12px;
+                padding: 10px 12px;
+                background: rgba(255, 255, 255, .8);
+                border: 1px solid rgba(220, 53, 69, .25);
+                border-radius: 6px;
+                align-items: flex-start;
+
+                @media (max-width: 768px) { flex-direction: column; }
+            }
+
+            .o_ksef_rejected_main { flex: 1; min-width: 0; }
+
+            .o_ksef_rejected_link {
+                color: var(--ksef-primary);
+                text-decoration: none;
+                cursor: pointer;
+                font-size: 13px;
+                &:hover { text-decoration: underline; }
+            }
+
+            .o_ksef_rejected_reason {
+                margin-top: 4px;
+                font-size: 12px;
+                color: var(--ksef-text);
+                line-height: 1.4;
+                font-style: italic;
+                i { color: var(--ksef-danger); opacity: .7; }
+            }
+
+            .o_ksef_rejected_actions {
+                display: flex;
+                gap: 6px;
+                flex-shrink: 0;
+                .btn { white-space: nowrap; }
+            }
+
+            // Variants
+            &.o_ksef_inbox_info {
+                background: var(--ksef-info-bg);
+                border-left-color: var(--ksef-info);
+                .o_ksef_inbox_icon { color: var(--ksef-info); }
+            }
+            &.o_ksef_inbox_warning {
+                background: var(--ksef-warning-bg);
+                border-left-color: var(--ksef-warning);
+                .o_ksef_inbox_icon { color: var(--ksef-warning-text); }
+            }
+            &.o_ksef_inbox_danger {
+                background: var(--ksef-danger-bg);
+                border-left-color: var(--ksef-danger);
+                .o_ksef_inbox_icon { color: var(--ksef-danger); }
+            }
+        }
+    }
+
+    // ── 4 + 5. Card base (chart + recent ops) ───────────────────────────────
+    .o_ksef_card {
+        background: var(--ksef-card-bg);
+        border-radius: var(--ksef-radius);
+        box-shadow: var(--ksef-shadow);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .o_ksef_card_header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px 18px;
+        font-size: 14px;
+        font-weight: 600;
+        border-bottom: 1px solid var(--ksef-border);
+
+        a {
+            font-weight: 400;
+            color: var(--ksef-primary);
+            text-decoration: none;
+            cursor: pointer;
+            &:hover { text-decoration: underline; }
+        }
+    }
+
+    // ── 4. Chart ────────────────────────────────────────────────────────────
+    .o_ksef_chart_wrapper {
+        flex: 1;
+        min-height: 220px;
+        padding: 12px 16px 16px;
+        position: relative;
+
+        svg { width: 100%; height: 100%; min-height: 180px; }
+    }
+
+    .o_ksef_tooltip {
+        position: absolute;
+        transform: translate(-50%, calc(-100% - 8px));
+        background: rgba(40, 40, 40, .92);
+        color: #fff;
+        border-radius: 5px;
+        padding: 5px 10px;
+        font-size: 11px;
+        pointer-events: none;
+        white-space: nowrap;
+        z-index: 10;
+        text-align: center;
+        line-height: 1.6;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, .2);
+
+        .o_ksef_tooltip_date { color: #ccc; font-size: 10px; }
+        strong { font-size: 13px; }
+    }
+
+    // ── 5. Recent operations ────────────────────────────────────────────────
+    .o_ksef_recent {
+        max-height: 460px;
+    }
+
+    .o_ksef_recent_list {
+        flex: 1;
+        overflow-y: auto;
+        min-height: 0;
+    }
+
+    .o_ksef_recent_row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 16px;
+        border-bottom: 1px solid var(--ksef-border);
+        cursor: pointer;
+        transition: background .1s;
+
+        &:hover { background: rgba(135, 90, 123, .04); }
+        &:last-child { border-bottom: none; }
+
+        .o_ksef_recent_main {
+            flex: 1;
+            min-width: 0;
+
+            .o_ksef_recent_name {
+                font-size: 13px;
+                font-weight: 600;
+                color: var(--ksef-primary);
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .o_ksef_recent_partner {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+        }
+
+        .o_ksef_recent_meta {
+            text-align: right;
+            flex-shrink: 0;
+
+            .o_ksef_recent_amount {
+                font-size: 13px;
+                font-weight: 600;
+                white-space: nowrap;
+                margin-bottom: 2px;
+            }
+        }
+    }
+
+    // ── Mobile tweaks (≤ 576px) ─────────────────────────────────────────────
+    @media (max-width: 576px) {
+        padding: 12px;
+
+        .o_ksef_hero {
+            flex-direction: column;
+            align-items: flex-start;
+
+            .o_ksef_hero_actions { width: 100%; }
+            .btn { flex: 1; }
+        }
+
+        .o_ksef_kpi_value { font-size: 26px; }
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Legacy alert banner (kept for backwards compatibility with kanban injection)
+// ═══════════════════════════════════════════════════════════════════════════
+.o_ksef_alert_banner {
+    grid-column: 1 / -1;
+    border-radius: 6px;
+    padding: 10px 16px;
+    font-size: 14px;
+}

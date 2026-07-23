@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head><meta charset="utf-8"/></head>
+<body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#fff;color:#111;line-height:1.6;margin:0;padding:0;">
+
+<!-- HERO -->
+<div style="padding:48px 48px 40px;border-bottom:1px solid #f0f0f0;">
+  <div style="display:inline-block;background:#20ac41;color:#fff;font-size:0.72em;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:4px 12px;border-radius:4px;margin-bottom:18px;">Odoo 17 Module</div>
+  <h1 style="font-size:2.2em;font-weight:800;letter-spacing:-1px;color:#111;line-height:1.15;margin:0 0 14px;">Fayna <span style="color:#20ac41;">KSeF</span></h1>
+  <p style="font-size:1.05em;color:#555;max-width:580px;margin:0 0 24px;">Integracja z KSeF 2.0 (FA 3) dla Odoo 17. Wysyłka faktur, monitorowanie statusów i pobieranie UPO — z pełną obsługą VAT Marża dla biur turystycznych.</p>
+  <div style="display:flex;gap:24px;flex-wrap:wrap;">
+    <span style="font-size:0.82em;color:#888;"><strong style="color:#111;">Rozwiązanie:</strong> Fayna Digital dla CampScout</span>
+    <span style="font-size:0.82em;color:#888;"><strong style="color:#111;">Autor:</strong> <a href="https://fayna.agency" style="color:#20ac41;font-weight:600;text-decoration:none;">Volodymyr Shevchenko</a></span>
+    <span style="font-size:0.82em;color:#888;"><strong style="color:#111;">Schemat:</strong> FA(3) v1-0E</span>
+    <span style="font-size:0.82em;color:#888;"><strong style="color:#111;">Wersja:</strong> 17.0.2.2.6</span>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div style="padding:44px 48px;border-bottom:1px solid #f0f0f0;background:#fafafa;">
+  <div style="font-size:0.72em;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#20ac41;margin-bottom:8px;">Możliwości</div>
+  <h2 style="font-size:1.4em;font-weight:800;color:#111;margin:0 0 28px;letter-spacing:-0.3px;">Co umie moduł</h2>
+  <div style="display:flex;gap:16px;flex-wrap:wrap;">
+
+    <div style="flex:1;min-width:240px;border:1px solid #e8e8e8;border-radius:8px;padding:22px;background:#fff;">
+      <div style="font-size:1.5em;margin-bottom:8px;">📤</div>
+      <h4 style="font-size:0.92em;font-weight:700;color:#111;margin:0 0 6px;">Wysyłka do KSeF</h4>
+      <p style="font-size:0.85em;color:#666;margin:0;line-height:1.55;">Generowanie XML FA(3) i wysyłka przez API KSeF 2.0 jednym kliknięciem bezpośrednio z faktury.</p>
+    </div>
+
+    <div style="flex:1;min-width:240px;border:1px solid #e8e8e8;border-radius:8px;padding:22px;background:#fff;">
+      <div style="font-size:1.5em;margin-bottom:8px;">🏷️</div>
+      <h4 style="font-size:0.92em;font-weight:700;color:#111;margin:0 0 6px;">VAT Marża turystyczna</h4>
+      <p style="font-size:0.85em;color:#666;margin:0;line-height:1.55;">Pełna obsługa faktur marżowych: P_13_11, PMarzy, mieszane faktury marża + regularny VAT.</p>
+    </div>
+
+    <div style="flex:1;min-width:240px;border:1px solid #e8e8e8;border-radius:8px;padding:22px;background:#fff;">
+      <div style="font-size:1.5em;margin-bottom:8px;">↩️</div>
+      <h4 style="font-size:0.92em;font-weight:700;color:#111;margin:0 0 6px;">Faktury korygujące (KOR)</h4>
+      <p style="font-size:0.85em;color:#666;margin:0;line-height:1.55;">Automatyczne budowanie sekcji DaneFaKorygowanej z NrKSeFFaKorygowanej dla not kredytowych.</p>
+    </div>
+
+    <div style="flex:1;min-width:240px;border:1px solid #e8e8e8;border-radius:8px;padding:22px;background:#fff;">
+      <div style="font-size:1.5em;margin-bottom:8px;">🔄</div>
+      <h4 style="font-size:0.92em;font-weight:700;color:#111;margin:0 0 6px;">Monitoring statusów</h4>
+      <p style="font-size:0.85em;color:#666;margin:0;line-height:1.55;">Cron co 15 minut sprawdza statusy sesji KSeF i automatycznie aktualizuje Nr KSeF po akceptacji.</p>
+    </div>
+
+    <div style="flex:1;min-width:240px;border:1px solid #e8e8e8;border-radius:8px;padding:22px;background:#fff;">
+      <div style="font-size:1.5em;margin-bottom:8px;">📄</div>
+      <h4 style="font-size:0.92em;font-weight:700;color:#111;margin:0 0 6px;">UPO jako załącznik</h4>
+      <p style="font-size:0.85em;color:#666;margin:0;line-height:1.55;">Urzędowe Potwierdzenie Odbioru pobierane z KSeF i zapisywane bezpośrednio do faktury w Odoo.</p>
+    </div>
+
+    <div style="flex:1;min-width:240px;border:1px solid #e8e8e8;border-radius:8px;padding:22px;background:#fff;">
+      <div style="font-size:1.5em;margin-bottom:8px;">📊</div>
+      <h4 style="font-size:0.92em;font-weight:700;color:#111;margin:0 0 6px;">Dashboard KSeF</h4>
+      <p style="font-size:0.85em;color:#666;margin:0;line-height:1.55;">Przegląd faktur: zaakceptowane, oczekujące, odrzucone — z wykresem aktywności i filtrowaniem.</p>
+    </div>
+
+    <div style="flex:1;min-width:240px;border:1px solid #e8e8e8;border-radius:8px;padding:22px;background:#fff;">
+      <div style="font-size:1.5em;margin-bottom:8px;">📥</div>
+      <h4 style="font-size:0.92em;font-weight:700;color:#111;margin:0 0 6px;">Bufor faktur przychodzących</h4>
+      <p style="font-size:0.85em;color:#666;margin:0;line-height:1.55;">Codzienna synchronizacja faktur dostawców z KSeF do bufora w Odoo z automatycznym cron.</p>
+    </div>
+
+    <div style="flex:1;min-width:240px;border:1px solid #e8e8e8;border-radius:8px;padding:22px;background:#fff;">
+      <div style="font-size:1.5em;margin-bottom:8px;">⚡</div>
+      <h4 style="font-size:0.92em;font-weight:700;color:#111;margin:0 0 6px;">Masowa wysyłka</h4>
+      <p style="font-size:0.85em;color:#666;margin:0;line-height:1.55;">Wysyłka wielu faktur naraz przez wizard — z podglądem wyników i obsługą błędów per faktura.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- FLOW -->
+<div style="padding:44px 48px;border-bottom:1px solid #f0f0f0;">
+  <div style="font-size:0.72em;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#20ac41;margin-bottom:8px;">Przepływ</div>
+  <h2 style="font-size:1.4em;font-weight:800;color:#111;margin:0 0 28px;letter-spacing:-0.3px;">Jak działa wysyłka</h2>
+  <div style="max-width:640px;">
+
+    <div style="display:flex;gap:18px;padding:18px 0;border-bottom:1px solid #ebebeb;">
+      <div style="width:30px;height:30px;min-width:30px;border-radius:50%;background:#20ac41;color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.82em;font-weight:800;margin-top:2px;">1</div>
+      <div><h5 style="font-size:0.92em;font-weight:700;color:#111;margin:0 0 4px;">Potwierdź fakturę w Odoo</h5><p style="font-size:0.85em;color:#666;margin:0;">Zwykła faktura klienta (out_invoice) lub nota kredytowa (out_refund). Status: Opublikowana.</p></div>
+    </div>
+
+    <div style="display:flex;gap:18px;padding:18px 0;border-bottom:1px solid #ebebeb;">
+      <div style="width:30px;height:30px;min-width:30px;border-radius:50%;background:#20ac41;color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.82em;font-weight:800;margin-top:2px;">2</div>
+      <div><h5 style="font-size:0.92em;font-weight:700;color:#111;margin:0 0 4px;">Kliknij „Wyślij do KSeF"</h5><p style="font-size:0.85em;color:#666;margin:0;">Moduł buduje XML FA(3), otwiera sesję interaktywną i wysyła zaszyfrowany dokument przez API KSeF.</p></div>
+    </div>
+
+    <div style="display:flex;gap:18px;padding:18px 0;border-bottom:1px solid #ebebeb;">
+      <div style="width:30px;height:30px;min-width:30px;border-radius:50%;background:#20ac41;color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.82em;font-weight:800;margin-top:2px;">3</div>
+      <div><h5 style="font-size:0.92em;font-weight:700;color:#111;margin:0 0 4px;">Status: Waiting for Status</h5><p style="font-size:0.85em;color:#666;margin:0;">KSeF przetwarza dokument. Nr referencyjny sesji (SO-...) zostaje zapisany na fakturze.</p></div>
+    </div>
+
+    <div style="display:flex;gap:18px;padding:18px 0;">
+      <div style="width:30px;height:30px;min-width:30px;border-radius:50%;background:#20ac41;color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.82em;font-weight:800;margin-top:2px;">4</div>
+      <div><h5 style="font-size:0.92em;font-weight:700;color:#111;margin:0 0 4px;">Status: Accepted — Nr KSeF nadany</h5><p style="font-size:0.85em;color:#666;margin:0;">Cron co 15 minut odpytuje KSeF. Po akceptacji Nr KSeF zostaje wpisany do faktury, UPO dostępne do pobrania.</p></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- REQUIREMENTS -->
+<div style="padding:44px 48px;border-bottom:1px solid #f0f0f0;background:#fafafa;">
+  <div style="font-size:0.72em;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#20ac41;margin-bottom:8px;">Wymagania</div>
+  <h2 style="font-size:1.4em;font-weight:800;color:#111;margin:0 0 24px;letter-spacing:-0.3px;">Instalacja i konfiguracja</h2>
+  <div style="max-width:640px;">
+
+    <div style="display:flex;gap:18px;padding:18px 0;border-bottom:1px solid #ebebeb;">
+      <div style="width:30px;height:30px;min-width:30px;border-radius:50%;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.82em;font-weight:800;margin-top:2px;">1</div>
+      <div><h5 style="font-size:0.92em;font-weight:700;color:#111;margin:0 0 4px;">Zależności Odoo</h5><p style="font-size:0.85em;color:#666;margin:0;">Moduły <code style="background:#f4f4f4;border-radius:3px;padding:1px 5px;font-size:0.88em;">account</code> i <code style="background:#f4f4f4;border-radius:3px;padding:1px 5px;font-size:0.88em;">l10n_pl</code> muszą być zainstalowane.</p></div>
+    </div>
+
+    <div style="display:flex;gap:18px;padding:18px 0;border-bottom:1px solid #ebebeb;">
+      <div style="width:30px;height:30px;min-width:30px;border-radius:50%;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.82em;font-weight:800;margin-top:2px;">2</div>
+      <div><h5 style="font-size:0.92em;font-weight:700;color:#111;margin:0 0 4px;">Biblioteka ksef-client</h5><p style="font-size:0.85em;color:#666;margin:0;"><code style="background:#f4f4f4;border-radius:3px;padding:1px 5px;font-size:0.88em;">pip install ksef-client&gt;=0.8</code> — obsługa KSeF 2.0 API z szyfrowaniem RSA-OAEP + AES-256-CBC.</p></div>
+    </div>
+
+    <div style="display:flex;gap:18px;padding:18px 0;">
+      <div style="width:30px;height:30px;min-width:30px;border-radius:50%;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font-size:0.82em;font-weight:800;margin-top:2px;">3</div>
+      <div><h5 style="font-size:0.92em;font-weight:700;color:#111;margin:0 0 4px;">Konfiguracja firmy</h5><p style="font-size:0.85em;color:#666;margin:0;">W <strong>Ustawienia → Firma → zakładka KSeF</strong>: NIP, token autoryzacyjny KSeF oraz certyfikat szyfrowania.</p></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div style="padding:24px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
+  <div style="font-size:0.85em;color:#555;">
+    Autor: <strong style="color:#111;">Volodymyr Shevchenko</strong> · <a href="https://fayna.agency" style="color:#20ac41;text-decoration:none;font-weight:600;">Fayna Digital</a> · dla <a href="https://campscout.eu" style="color:#20ac41;text-decoration:none;">CampScout</a>
+  </div>
+  <div style="background:#111;color:#fff;font-size:0.75em;font-weight:700;padding:3px 10px;border-radius:4px;letter-spacing:0.5px;">v17.0.2.2.6</div>
+</div>
+
+</body>
+</html>

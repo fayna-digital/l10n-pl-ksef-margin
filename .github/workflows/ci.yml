@@ -1,0 +1,80 @@
+name: CI
+
+# Runs on PR + push to main. Blocks merge on lint/format/security/type
+# failures (job "lint") or on the real Odoo test suite (job "test").
+# .pre-commit-config.yaml is the single source of truth for the lint job —
+# the same hooks run locally via `pre-commit run --all-files`.
+#
+# The module already lives in a directory named after its Odoo technical
+# name (l10n_pl_ksef_margin/, underscores) inside the repo — Odoo requires
+# that for the addon to install and for mypy to treat it as a valid package.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint (ruff + mypy + bandit + gitleaks + OCA + no-ai-signature)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # gitleaks needs full history
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: .pre-commit-config.yaml
+
+      - name: Install pre-commit
+        run: pip install pre-commit
+
+      - name: Run pre-commit hooks
+        run: pre-commit run --all-files --show-diff-on-failure
+
+  test:
+    name: Tests (Odoo 17 + Postgres)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: odoo
+          POSTGRES_PASSWORD: odoo
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U odoo"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install and test l10n_pl_ksef_margin inside Odoo 17
+        run: |
+          docker run --rm \
+            --network host \
+            -e HOST=127.0.0.1 -e PORT=5432 -e USER=odoo -e PASSWORD=odoo \
+            -v "${{ github.workspace }}/l10n_pl_ksef_margin:/mnt/extra-addons/l10n_pl_ksef_margin:ro" \
+            odoo:17.0 \
+            bash -c "
+              pip install --no-cache-dir 'ksef-client>=0.8' &&
+              odoo --addons-path=/mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons \
+                   --db_host=127.0.0.1 --db_port=5432 --db_user=odoo --db_password=odoo \
+                   -d ci_l10n_pl_ksef_margin \
+                   -i l10n_pl_ksef_margin \
+                   --test-enable --stop-after-init --no-http --log-level=test
+            "
