@@ -113,7 +113,9 @@ def _make_move(
 
 
 def _parse_xml(xml_bytes: bytes) -> ET.Element:
-    return ET.fromstring(xml_bytes)
+    # nosec B314 — parses XML this same test module just generated in-memory
+    # (KsefXmlBuilder output), never external/untrusted input.
+    return ET.fromstring(xml_bytes)  # nosec B314
 
 
 def _find(root, *tags) -> ET.Element | None:

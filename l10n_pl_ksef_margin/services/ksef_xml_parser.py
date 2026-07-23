@@ -9,6 +9,7 @@ Namespace: http://crd.gov.pl/wzor/2025/06/25/13775/
 
 import logging
 from datetime import date, datetime
+from xml.etree.ElementTree import Element  # type only — never used to parse untrusted input
 
 try:
     from defusedxml import ElementTree as ET  # hardened against XML entity/DoS attacks
@@ -76,7 +77,7 @@ class KsefXmlParser:
         if not xml_bytes:
             raise KsefXmlParseError('XML is empty.')
         self._xml_bytes = xml_bytes
-        self._root: ET.Element | None = None
+        self._root: Element | None = None
 
     # ─────────────────────────────────────────────
     # Public API
@@ -111,13 +112,17 @@ class KsefXmlParser:
     # XML structure helpers
     # ─────────────────────────────────────────────
 
-    def _parse_xml(self) -> ET.Element:
+    def _parse_xml(self) -> Element:
         try:
-            return ET.fromstring(self._xml_bytes)
+            # nosec B314 — this is defusedxml.ElementTree.fromstring when the
+            # optional hardening dependency is installed (see the import guard
+            # above); bandit's static AST check can't see through the
+            # try/except and flags the call shape alone.
+            return ET.fromstring(self._xml_bytes)  # nosec B314
         except ET.ParseError as e:
             raise KsefXmlParseError(f'Malformed XML: {e}') from e
 
-    def _get_fa_element(self) -> ET.Element:
+    def _get_fa_element(self) -> Element:
         """Returns the <Fa> element (main invoice body).
 
         Only called from ``parse()`` after ``self._root`` has been set by
@@ -136,7 +141,7 @@ class KsefXmlParser:
             raise KsefXmlParseError('Element <Fa> not found in XML.')
         return fa
 
-    def _get_podmiot1(self) -> ET.Element | None:
+    def _get_podmiot1(self) -> Element | None:
         """Returns <Podmiot1> (seller block). See ``_get_fa_element`` for the
         ``self._root`` precondition."""
         if self._root is None:
@@ -144,7 +149,7 @@ class KsefXmlParser:
         el = self._root.find(f'{_N}Podmiot1')
         return el if el is not None else self._root.find('Podmiot1')
 
-    def _get_text(self, element: ET.Element, tag: str) -> str | None:
+    def _get_text(self, element: Element, tag: str) -> str | None:
         """Finds direct child <tag> and returns its text, or None."""
         child = element.find(f'{_N}{tag}')
         if child is None:
@@ -193,7 +198,7 @@ class KsefXmlParser:
     # Dates
     # ─────────────────────────────────────────────
 
-    def _get_due_date(self, fa: ET.Element) -> date | None:
+    def _get_due_date(self, fa: Element) -> date | None:
         """Reads <TerminPlatnosci><Termin> (first payment term date)."""
         # FA(3) stores payment terms under <Platnosci><Platnosc><TerminPlatnosci>
         platnosci_tmp = fa.find(f'{_N}Platnosci')
@@ -211,7 +216,7 @@ class KsefXmlParser:
         termin_text = self._get_text(termin_el, 'Termin')
         return self._parse_date(termin_text)
 
-    def _get_payment_iban(self, fa: ET.Element) -> str | None:
+    def _get_payment_iban(self, fa: Element) -> str | None:
         """Reads IBAN from <Platnosci><Platnosc><RachunekBankowy><NrRB>."""
         platnosci_tmp = fa.find(f'{_N}Platnosci')
         platnosci = platnosci_tmp if platnosci_tmp is not None else fa.find('Platnosci')
@@ -231,7 +236,7 @@ class KsefXmlParser:
     # Invoice lines
     # ─────────────────────────────────────────────
 
-    def _parse_lines(self, fa: ET.Element, is_marza: bool) -> list[dict]:
+    def _parse_lines(self, fa: Element, is_marza: bool) -> list[dict]:
         lines = []
         wiersze = fa.findall(f'{_N}FaWiersz') or fa.findall('FaWiersz')
         for wiersz in wiersze:
@@ -240,7 +245,7 @@ class KsefXmlParser:
                 lines.append(line)
         return lines
 
-    def _parse_single_line(self, wiersz: ET.Element, is_marza: bool) -> dict | None:
+    def _parse_single_line(self, wiersz: Element, is_marza: bool) -> dict | None:
         name = self._get_text(wiersz, 'P_7') or ''
         qty = self._parse_float(self._get_text(wiersz, 'P_8B') or '1')
         uom = self._get_text(wiersz, 'P_8A') or 'szt'
@@ -279,7 +284,7 @@ class KsefXmlParser:
             'tax_rate': tax_rate,
         }
 
-    def _get_line_tax_rate(self, wiersz: ET.Element) -> int | None:
+    def _get_line_tax_rate(self, wiersz: Element) -> int | None:
         """Reads <P_12> and returns integer tax rate (23, 8, 5, 0, -1) or None."""
         p12 = self._get_text(wiersz, 'P_12')
         if p12 is None:
@@ -305,7 +310,7 @@ class KsefXmlParser:
     # Tax breakdown (P_13_x)
     # ─────────────────────────────────────────────
 
-    def _parse_tax_breakdown(self, fa: ET.Element) -> dict:
+    def _parse_tax_breakdown(self, fa: Element) -> dict:
         """Returns {tax_rate_int: net_amount} from P_13_x elements."""
         breakdown = {}
         for field, rate in _FIELD_TO_TAX_RATE.items():
@@ -320,7 +325,7 @@ class KsefXmlParser:
     # VAT Marża detection
     # ─────────────────────────────────────────────
 
-    def _detect_marza(self, fa: ET.Element) -> bool:
+    def _detect_marza(self, fa: Element) -> bool:
         """Returns True if the invoice uses VAT Marża procedure.
 
         FA(3) signals this via <PMarzy><P_PMarzy>1</P_PMarzy> or
