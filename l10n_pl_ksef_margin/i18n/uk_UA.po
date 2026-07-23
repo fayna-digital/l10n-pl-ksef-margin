@@ -17,38 +17,13 @@ msgstr ""
 
 #. module: l10n_pl_ksef_margin
 #. odoo-javascript
-msgid "Чернетка"
-msgstr "Чернетка"
-
-#. module: l10n_pl_ksef_margin
-#. odoo-javascript
-msgid "Очікує"
-msgstr "Очікує"
-
-#. module: l10n_pl_ksef_margin
-#. odoo-javascript
-msgid "Прийнято"
-msgstr "Прийнято"
-
-#. module: l10n_pl_ksef_margin
-#. odoo-javascript
-msgid "Відхилено"
-msgstr "Відхилено"
-
-#. module: l10n_pl_ksef_margin
-#. odoo-javascript
 msgid "Brak faktur do wysłania."
 msgstr "Немає фактур для відправки."
 
 #. module: l10n_pl_ksef_margin
 #. odoo-javascript
-msgid "KSeF — Wyślij faktury"
-msgstr "KSeF — Надіслати фактури"
-
-#. module: l10n_pl_ksef_margin
-#. odoo-javascript
-msgid "Synchronizacja z KSeF zakończona."
-msgstr "Синхронізацію з KSeF завершено."
+msgid "Błąd ponownej wysyłki: %s"
+msgstr "Помилка повторної відправки: %s"
 
 #. module: l10n_pl_ksef_margin
 #. odoo-javascript
@@ -67,10 +42,35 @@ msgstr "Фактуру повторно надіслано до KSeF."
 
 #. module: l10n_pl_ksef_margin
 #. odoo-javascript
-msgid "Błąd ponownej wysyłki: %s"
-msgstr "Помилка повторної відправки: %s"
+msgid "KSeF — Wyślij faktury"
+msgstr "KSeF — Надіслати фактури"
 
 #. module: l10n_pl_ksef_margin
 #. odoo-python
 msgid "No description provided by KSeF."
 msgstr "KSeF не повідомив деталей відхилення."
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Synchronizacja z KSeF zakończona."
+msgstr "Синхронізацію з KSeF завершено."
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Відхилено"
+msgstr ""
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Очікує"
+msgstr ""
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Прийнято"
+msgstr ""
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Чернетка"
+msgstr ""

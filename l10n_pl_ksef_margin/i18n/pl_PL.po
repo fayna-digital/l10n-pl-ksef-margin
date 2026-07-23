@@ -17,8 +17,48 @@ msgstr ""
 
 #. module: l10n_pl_ksef_margin
 #. odoo-javascript
-msgid "Чернетка"
-msgstr "Szkic"
+msgid "Brak faktur do wysłania."
+msgstr ""
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Błąd ponownej wysyłki: %s"
+msgstr ""
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Błąd synchronizacji: %s"
+msgstr ""
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Dashboard odświeżony."
+msgstr ""
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Faktura wysłana ponownie do KSeF."
+msgstr ""
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "KSeF — Wyślij faktury"
+msgstr ""
+
+#. module: l10n_pl_ksef_margin
+#. odoo-python
+msgid "No description provided by KSeF."
+msgstr "KSeF nie podał szczegółów odrzucenia."
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Synchronizacja z KSeF zakończona."
+msgstr ""
+
+#. module: l10n_pl_ksef_margin
+#. odoo-javascript
+msgid "Відхилено"
+msgstr "Odrzucone"
 
 #. module: l10n_pl_ksef_margin
 #. odoo-javascript
@@ -32,45 +72,5 @@ msgstr "Zaakceptowane"
 
 #. module: l10n_pl_ksef_margin
 #. odoo-javascript
-msgid "Відхилено"
-msgstr "Odrzucone"
-
-#. module: l10n_pl_ksef_margin
-#. odoo-javascript
-msgid "Brak faktur do wysłania."
-msgstr "Brak faktur do wysłania."
-
-#. module: l10n_pl_ksef_margin
-#. odoo-javascript
-msgid "KSeF — Wyślij faktury"
-msgstr "KSeF — Wyślij faktury"
-
-#. module: l10n_pl_ksef_margin
-#. odoo-javascript
-msgid "Synchronizacja z KSeF zakończona."
-msgstr "Synchronizacja z KSeF zakończona."
-
-#. module: l10n_pl_ksef_margin
-#. odoo-javascript
-msgid "Błąd synchronizacji: %s"
-msgstr "Błąd synchronizacji: %s"
-
-#. module: l10n_pl_ksef_margin
-#. odoo-javascript
-msgid "Dashboard odświeżony."
-msgstr "Dashboard odświeżony."
-
-#. module: l10n_pl_ksef_margin
-#. odoo-javascript
-msgid "Faktura wysłana ponownie do KSeF."
-msgstr "Faktura wysłana ponownie do KSeF."
-
-#. module: l10n_pl_ksef_margin
-#. odoo-javascript
-msgid "Błąd ponownej wysyłki: %s"
-msgstr "Błąd ponownej wysyłki: %s"
-
-#. module: l10n_pl_ksef_margin
-#. odoo-python
-msgid "No description provided by KSeF."
-msgstr "KSeF nie podał szczegółów odrzucenia."
+msgid "Чернетка"
+msgstr "Szkic"
