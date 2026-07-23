@@ -33,7 +33,7 @@ def _make_line(
     price_total: float = 123.0,
     taxes: list | None = None,
     uom_name: str = 'Units',
-    display_type: str = False,
+    display_type: str | bool = False,  # Odoo Selection fields are `False`, not '', when unset
 ) -> MagicMock:
     line = MagicMock()
     line.display_type = display_type
