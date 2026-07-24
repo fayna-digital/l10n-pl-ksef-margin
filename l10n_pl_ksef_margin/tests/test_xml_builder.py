@@ -295,7 +295,9 @@ class TestKsefXmlBuilderTaxCodes(BaseCase):
         _tmp = fa.find(f'{_N}FaWiersz')
         wiersz = _tmp if _tmp is not None else fa.find('FaWiersz')
         p12 = _text(wiersz, 'P_12') if wiersz is not None else None
-        self.assertEqual(p12, 'ZW')
+        # Lowercase 'zw' per FA(3) XSD TStawkaPodatku — see
+        # ksef_xml_builder._get_tax_code, not 'ZW'.
+        self.assertEqual(p12, 'zw')
 
 
 class TestKsefXmlBuilderEmptyZeroVatGroup(BaseCase):
